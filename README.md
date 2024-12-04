@@ -58,3 +58,8 @@ To benchmark the generator on your system run the following command inside the s
 ```sh
 go test -run=^$ -bench=.
 ```
+
+## Reference
+
+- [snowflake](https://github.com/bwmarrin/snowflake)
+- [snowflake](https://github.com/sony/sonyflake)
