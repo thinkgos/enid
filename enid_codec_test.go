@@ -39,7 +39,6 @@ func Test_Base32(t *testing.T) {
 	}
 
 	for i := 0; i < 100; i++ {
-
 		sf := node.Next()
 		b32i := sf.Base32()
 		psf, err := ParseBase32([]byte(b32i))
@@ -89,7 +88,6 @@ func Test_Base58(t *testing.T) {
 	}
 
 	for i := 0; i < 10; i++ {
-
 		sf := node.Next()
 		b58 := sf.Base58()
 		psf, err := ParseBase58([]byte(b58))

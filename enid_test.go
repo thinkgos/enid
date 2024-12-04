@@ -8,22 +8,16 @@ import (
 	"testing"
 )
 
-func Test_PrintAll(t *testing.T) {
-	node, err := New(WithEntropy(rand.IntN))
-	if err != nil {
-		t.Fatalf("error creating NewNode, %s", err)
+func Test_New(t *testing.T) {
+	_, err := New(WithNodeStepBits(11, 11))
+	if err == nil {
+		t.Fatal("we have a total 20 bits to share between Node/Step")
 	}
-	id := node.Next()
 
-	t.Logf("Int64    : %#v", id.Int64())
-	t.Logf("String   : %#v", id.String())
-	t.Logf("Base2    : %#v", id.Base2())
-	t.Logf("Base32   : %#v", id.Base32())
-	t.Logf("Base36   : %#v", id.Base36())
-	t.Logf("Base58   : %#v", id.Base58())
-	t.Logf("Base64   : %#v", id.Base64())
-	t.Logf("Bytes    : %#v", id.Bytes())
-	t.Logf("IntBytes : %#v", id.IntBytes())
+	_, err = New(WithNode(256))
+	if err == nil {
+		t.Fatal("node number must be between 0 and 255")
+	}
 }
 
 // lazy check if Generate will create duplicate IDs
@@ -41,12 +35,24 @@ func Test_GenerateDuplicateID(t *testing.T) {
 	}
 }
 
-func Test_Order(t *testing.T) {
+func Test_Order_Int(t *testing.T) {
 	node, _ := New(WithEntropy(rand.IntN))
-	n := 100000
+	n := 5000000
 	bs := make([]int64, 0, n)
 	for i := 0; i < n; i++ {
 		bs = append(bs, node.Next().Int64())
+	}
+	if !slices.IsSorted(bs) {
+		t.Error("not a order id generate")
+	}
+}
+
+func Test_Order_Base36(t *testing.T) {
+	node, _ := New(WithEntropy(rand.IntN))
+	n := 100000
+	bs := make([]string, 0, n)
+	for i := 0; i < n; i++ {
+		bs = append(bs, node.Next().Base36())
 	}
 	if !slices.IsSorted(bs) {
 		t.Error("not a order id generate")
@@ -86,7 +92,6 @@ func Test_Int64(t *testing.T) {
 	if pID.Int64() != mi {
 		t.Fatalf("pID %v != mi %v", pID.Int64(), mi)
 	}
-
 }
 
 func Test_String(t *testing.T) {

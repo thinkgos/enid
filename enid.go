@@ -59,12 +59,11 @@ type Enid struct {
 
 	nodeBits      uint8
 	stepBits      uint8
+	timeShift     uint8
+	stepShift     uint8
 	nodeMax       int64
 	nodeMask      int64
 	stepMask      int64
-	timeShift     uint8
-	nodeShift     uint8
-	stepShift     uint8
 	enableEntropy bool
 	entropy       func(n int) int
 }
@@ -107,6 +106,16 @@ func WithNodeStepBits(nodeBits, stepBits uint8) Option {
 	}
 }
 
+// MustNew is a convenience function equivalent to New that panics on failure
+// instead of returning an error.
+func MustNew(opts ...Option) *Enid {
+	e, err := New(opts...)
+	if err != nil {
+		panic(err)
+	}
+	return e
+}
+
 // New returns a new enid node that can be used to generate enid Ids
 func New(opts ...Option) (*Enid, error) {
 	n := &Enid{
@@ -123,13 +132,11 @@ func New(opts ...Option) (*Enid, error) {
 		return nil, errors.New("we have a total 20 bits to share between Node/Step")
 	}
 
+	n.timeShift = n.nodeBits + n.stepBits
+	n.stepShift = n.nodeBits
 	n.nodeMax = -1 ^ (-1 << n.nodeBits)
 	n.nodeMask = n.nodeMax << n.stepBits
 	n.stepMask = -1 ^ (-1 << n.stepBits)
-	n.timeShift = n.nodeBits + n.stepBits
-	n.nodeShift = n.stepBits
-	n.stepShift = n.nodeBits
-
 	if n.node < 0 || n.node > n.nodeMax {
 		return nil, errors.New("node number must be between 0 and " + strconv.FormatInt(n.nodeMax, 10))
 	}
