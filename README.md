@@ -25,7 +25,7 @@
 By default, the id format follows:
 
 - The id as a whole is a 63 bit integer stored in an int64
-- 43 bits are used to store a timestamp with millisecond precision, using a custom epoch.
+- 43 bits are used to store a timestamp with millisecond precision, using a custom epoch. default Dec 01 2024 05:06:07 UTC in milliseconds. The lifetime almost 278 year
 - 12 bits are used to store a sequence number - a range from 0 through 4095.
 - 8 bits are used to store a node id or rand number - a range from 0 through 255.
 
@@ -62,4 +62,4 @@ go test -run=^$ -bench=.
 ## Reference
 
 - [snowflake](https://github.com/bwmarrin/snowflake)
-- [snowflake](https://github.com/sony/sonyflake)
+- [sonyflake](https://github.com/sony/sonyflake)

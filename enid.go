@@ -88,12 +88,12 @@ func WithEntropy(f func(n int) int) Option {
 	}
 }
 
-// WithEpoch customize this to set a different epoch for your application.
-func WithEpoch(ts int64) Option {
+// WithEpoch customize this to set a different epoch(UTC in milliseconds) for your application.
+func WithEpoch(epoch int64) Option {
 	return func(e *Enid) {
 		curTime := time.Now()
 		// add time.Duration to curTime to make sure we use the monotonic clock if available
-		e.epoch = curTime.Add(time.Unix(ts/1000, (ts%1000)*1000000).Sub(curTime))
+		e.epoch = curTime.Add(time.UnixMilli(epoch).Sub(curTime))
 	}
 }
 
