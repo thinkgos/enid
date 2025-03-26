@@ -64,7 +64,7 @@ func Test_Race(t *testing.T) {
 	node, _ := New(WithNode(1))
 	go func() {
 		for i := 0; i < 1000000000; i++ {
-			New(WithNode(1))
+			_, _ = New(WithNode(1))
 		}
 	}()
 
