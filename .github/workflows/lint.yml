@@ -4,7 +4,6 @@ on:
   push:
     paths-ignore:
       - "**.md"
-      - "guide/**"
 
 jobs:
   golang-ci:
